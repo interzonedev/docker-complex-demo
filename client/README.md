@@ -1,70 +1,104 @@
-# Getting Started with Create React App
+# docker-complex-demo - client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## NodeJS Commands
 
-## Available Scripts
+To create the React client app (from the project directory):
+```
+npx create-react-app client
+```
 
-In the project directory, you can run:
+To start the app (from the client directory):
+```
+npm run start
+```
+or
+```
+npm start
+```
 
-### `npm start`
+To run the unit tests (from the client directory):
+```
+npm run test
+```
+or
+```
+npm test
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+To create a production build (from the client directory):
+```
+npm run build
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To clean the production build (from the client directory):
+```
+npm run clean
+```
 
-### `npm test`
+Note:
+The `npm test`, `npm start`, `npm restart`, and `npm stop` commands are all aliases for `npm run xxx`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+For all other scripts use `npm run xxx`.
 
-### `npm run build`
+## Docker Commands
+Build a tagged development image and see output:
+```
+docker build -f Dockerfile.dev -t boltgun69/docker-complex-demo-client --progress=plain .
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Build a tagged production image and see output:
+```
+docker build -t boltgun69/docker-complex-demo-client --progress=plain .
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Run development app (just NodeJS):
+```
+docker run -p 3000:3000 --name docker-complex-demo-client boltgun69/docker-complex-demo-client
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Run production app (Nginx):
+```
+docker run -p 8080:80 --name docker-complex-demo-client boltgun69/docker-complex-demo-client
+```
 
-### `npm run eject`
+Run with port mapping and volumes:
+```
+docker run -p 3000:3000 -v /app/node_modules -v "$(pwd):/app" boltgun69/docker-complex-demo-client
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To stop local container:
+```
+docker stop docker-complex-demo-client
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The development app will be available at [http://localhost:3000](http://localhost:3000).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Explore the file system of the running container:
+```
+docker run -it boltgun69/docker-complex-demo-client sh
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Run unit tests:
+```
+docker run -it boltgun69/docker-complex-demo-client npm run test
+```
 
-## Learn More
+Build and run the development app and unit test containers:
+```
+docker compose -f docker-compose-dev.yml up --build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Stop the development app and unit test containers:
+```
+docker compose -f docker-compose-dev.yml down
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Build and run the production app container:
+```
+docker compose up --build
+```
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Stop the production app container:
+```
+docker compose down
+```
