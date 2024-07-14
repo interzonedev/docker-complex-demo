@@ -1,0 +1,28 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      # - name: Deploy to Elastic Beanstalk
+      #   uses: einaregilsson/beanstalk-deploy@v22
+      #   with:
+      #     aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+      #     aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+      #     application_name: eb-docker-static-web
+      #     environment_name: eb-docker-static-web-env
+      #     existing_bucket_name: elasticbeanstalk-us-west-1-815332568426
+      #     region: us-west-1
+      #     version_label: ${{ github.sha }}-${{ github.run_number }}
+      #     deployment_package: deploy.zip
+      #     use_existing_version_if_available: true
